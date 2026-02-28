@@ -52,6 +52,7 @@ async def get_video_info(request: VideoRequest):
             'nocheckcertificate': True,
             'geo_bypass': True,
             'socket_timeout': 10,
+            'cookiefile': 'youtube.com_cookies.txt',
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(request.url, download=False)
@@ -119,7 +120,7 @@ async def download_video(request: DownloadRequest, background_tasks: BackgroundT
         format_selector = request.format_id
         
         # We need to fetch info again to check codecs of the requested format
-        ydl_opts_info = {'quiet': True, 'no_warnings': True}
+        ydl_opts_info = {'quiet': True, 'no_warnings': True, 'cookiefile': 'youtube.com_cookies.txt'}
         needs_mux = False
         
         with yt_dlp.YoutubeDL(ydl_opts_info) as ydl:
@@ -152,6 +153,7 @@ async def download_video(request: DownloadRequest, background_tasks: BackgroundT
             'quiet': False,
             'verbose': True,
             'logger': MyLogger(),
+            'cookiefile': 'youtube.com_cookies.txt',
             'merge_output_format': 'mp4', # Force MP4 if merging
         }
         
